@@ -1,18 +1,23 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const rotaProdutos = require('./routes/produtos');
 const rotaPedidos = require('./routes/pedidos');
 //no ambiente de desenvolvimento ele excuta um callback para cada
 //rota trazendo um log detalhado 
 app.use(morgan('dev'));
+//aceita apenas dados simples
+app.use(bodyParser.urlencoded({extended:false}));
+//só var aceitar json de entrada no body
+app.use(bodyParser.json());
 app.use('/produtos',rotaProdutos);
 app.use('/pedidos',rotaPedidos);
 
 //Quando não encontra rota, entra aqui
 app.use((req,res,next) => {
-    const erro = new Error('Não encontrado');
+    const erro = new Error('Rota não encontrada');
     erro.status = 404;
     next(erro);
 });

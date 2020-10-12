@@ -9,8 +9,13 @@ router.get('/',(req,res,next) =>{
 });
 //salva um produto
 router.post('/',(req,res,next) =>{
+    const produto = {
+        nome: req.body.nome,
+        preco: req.body.preco
+    };
     res.status(201).send({
-        mensagem:'Usando o POST dentro da rota de produtos'
+        mensagem:'Insere Produto',
+        produtoCriado: produto
     });
 });
 //retorna um produto
