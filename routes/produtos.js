@@ -11,8 +11,9 @@ const multer = require('multer');
 const login = require('../middleware/login');
 
 
-const storage = multer.diskStorage({
+const storage = multer.diskStorage({    
     destination: function(req, file, cb){
+        console.log(req);
         cb(null,'./uploads');
     },
     filename: function(req,file,cb){
