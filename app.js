@@ -8,6 +8,8 @@ const rotaPedidos = require('./routes/pedidos');
 //no ambiente de desenvolvimento ele excuta um callback para cada
 //rota trazendo um log detalhado 
 app.use(morgan('dev'));
+//informa que o diretorio uploads está disponivel publicamente
+app.use('/uploads', express.static('uploads'));
 //aceita apenas dados simples
 app.use(bodyParser.urlencoded({extended:false}));
 //só var aceitar json de entrada no body
