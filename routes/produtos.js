@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+
 //inclui o client porque está exportando no mysql.js somente o pool
 const mysql = require('../mysql').pool;
+
+
 //para fazer uploads
 const multer = require('multer');
+
 const login = require('../middleware/login');
+
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
@@ -17,6 +22,7 @@ const storage = multer.diskStorage({
 })
 
 const fileFilter = (req, file, cb) => {
+    console.log(file.mimetype);
     if (file.mimetype === 'image/jpeg' || file.minetype === 'image/jpg') {
         cb(null,true);
     } else {
@@ -25,7 +31,7 @@ const fileFilter = (req, file, cb) => {
 }
 
 //passa o destino para salvar todas as imagens dentro da pasta uploads
-const upload = multer({
+const upload = multer({    
         storage:storage,
         limits: {
             fileSize:1024 * 1024 * 5
@@ -35,7 +41,7 @@ const upload = multer({
 
 //retorna todos os produtos
 router.get('/',(req,res,next) =>{
-   mysql.getConnection((error,conn)=> {
+    mysql.getConnection((error,conn)=> {
         if (error) { return res.status(500).send({error:error})}
         conn.query(
             'select * from produtos',
@@ -62,9 +68,10 @@ router.get('/',(req,res,next) =>{
         );
     });
 });
+
 //salva um produto
 router.post('/',login.obrigatorio,upload.single('produto_imagem'),(req,res,next) =>{
-    console.log(req.usuario);
+    console.log(req);
     mysql.getConnection((error,conn)=> {
         if (error) { return res.status(500).send({error:error})}
         conn.query(
@@ -74,7 +81,7 @@ router.post('/',login.obrigatorio,upload.single('produto_imagem'),(req,res,next)
                 req.body.preco,
                 req.file.path
             ],
-            (error,result,field)=> {
+            (error,result,field) => {
                 conn.release();
                 if (error) { return res.status(500).send({error:error})}
                 const response = {

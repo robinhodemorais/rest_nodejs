@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 
 //obrigatorio token
-exports.obrigatorio = (req, res, next) => {
+exports.obrigatorio = (req, res, next) => {    
     try {
         const token = req.headers.authorization.split(' ')[1];
         const decode = jwt.verify(token.toString(), process.env.JWT_KEY);
         req.usuario = decode;
+        //console.log(req.usuario);
         next();
     } catch (error) {
         return res.status(401).send({error: error, mensagem:'Falha na autenticação'});
