@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const rotaProdutos = require('./routes/produtos');
 const rotaPedidos = require('./routes/pedidos');
+const rotaUsuarios = require('./routes/usuarios');
 //no ambiente de desenvolvimento ele excuta um callback para cada
 //rota trazendo um log detalhado 
 app.use(morgan('dev'));
@@ -31,6 +32,7 @@ app.use((req,res,next)=>{
 
 app.use('/produtos',rotaProdutos);
 app.use('/pedidos',rotaPedidos);
+app.use('/usuarios',rotaUsuarios);
 
 //Quando não encontra rota, entra aqui
 app.use((req,res,next) => {
